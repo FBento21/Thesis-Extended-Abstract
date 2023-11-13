@@ -326,42 +326,36 @@ Consider a polygonal domain \(\Omega \subset \mathbb{R}^2\) which we divide into
 \end{align}
 First, we formalize the equivalence between the weak formulations of the problems \eqref{decomp_prob} and the Poisson equation with Dirichlet boundary conditions. Set
 \[
-k = \begin{cases}
-    k_1,& \text{in } \Omega_1\\
-    k_2,& \text{in } \Omega_2
-\end{cases}, \text{ and }
-f = \begin{cases}
-    \frac{f_1}{k_1},& \text{in } \Omega_1\\
-    \frac{f_2}{k_2},& \text{in } \Omega_2
-\end{cases}
+    k(x) = \begin{cases}
+    k_1,& x \in \Omega_1\\
+    k_2,& x \in \Omega_2
+\end{cases},
 \]
 and define the bilinear form
 \[
-    a(u,v)=\int_\Omega \nabla u \cdot \nabla v dx
+    a(u,v)=\int_\Omega k(x)\nabla u \cdot \nabla v dx
 \]
-defined in \(V^0 \times V^0\), where \(V^0 = H^1_0(\Omega)\). Consider the Poisson equation
+in \(H^1_0 \times H^1_0\). Consider the Poisson equation in the divergence form
 \begin{align}\label{decomp_poisson}
     \begin{cases}
-        -\Delta u = f, & \text{in }\Omega \\
+        -\nabla \cdot (k(x) \nabla u) = f, & \text{in }\Omega \\
         u = 0, & \text{on } \partial\Omega,
     \end{cases}
 \end{align}
 whose (unique) solution satisfies the weak variational form
 \begin{equation}\label{weak_poisson}
-    \text{find } u \in V^0: a(u,v) = (f, v), \; \forall v \in V^0,
+    \text{find } u \in H^1_0: a(u,v) = (f, v), \; \forall v \in H^1_0,
 \end{equation}
 where \((f,v)\) denotes the \(L^2(\Omega)\) inner product between \(f\) and \(v\).
 
 In our work, we start by constructing the weak form of the problem \eqref{decomp_prob}.
-\begin{proposition}
+\begin{definition}
     Consider the set of equations \eqref{decomp_prob}. For \(i=1, 2\), let
     \begin{align*}
         &V_i = \{v_i \in H^1(\Omega_i): v_{i_{|\partial \Omega \cap \partial {\Omega_i}}}=0\},\\
-        &V_i^0 = H^1_0(\Omega_i),\\
-        &\Lambda = \{\eta \in H^\frac{1}{2}(\gamma): \eta = v_{|\gamma} \text{ for some } v \in V^0\}, \\
-        &a_i (u_i, v_i) = \int_{\Omega_i} \nabla u_i \cdot \nabla v_i,
+        &\Lambda = \{\eta \in H^\frac{1}{2}(\gamma): \eta = v_{|\gamma} \text{ for some } v \in H^1_0\}, \\
+        &a_i (u_i, v_i) = \int_{\Omega_i} k_i\nabla u_i \cdot \nabla v_i dx,
     \end{align*}
-    where \(V^0 = H^1_0(\Omega)\) as above.
     Then the weak formulation of \eqref{decomp_prob} reads as
     \begin{center}
         \textit{find} \(u_1\in V_1, u_2 \in V_2\) \textit{such that}
@@ -369,24 +363,24 @@ In our work, we start by constructing the weak form of the problem \eqref{decomp
     \begin{equation}\label{weak_decomp}
         \begin{aligned}
             &\begin{cases}
-                a_1(u_1, v_1) = (\frac{f_1}{k_1}, v_1), & \forall v_1 \in V_1^0\\
-                a_2(u_2, v_2) = (\frac{f_2}{k_2}, v_1), & \forall v_2 \in V_2^0\\
+                a_1(u_1, v_1) = (f_1, v_1), & \forall v_1 \in H^1_0\\
+                a_2(u_2, v_2) = (f_2, v_2), & \forall v_2 \in H^1_0\\
                 u_1 = u_2, & \text{ on } \gamma\\
                 \begin{aligned}
-                a_1(k_1 u_1, P_1 \mu) + a_2(k_2 u_2, P_2 \mu) \\[0.2cm] = (f_1, P_1 \mu)
+                a_1(u_1, P_1 \mu) + a_2(u_2, P_2 \mu) \\[0.2cm] = (f_1, P_1 \mu)
                 + (f_2, P_2 \mu),
                 \end{aligned} & \forall \mu \in \Lambda
             \end{cases}
         \end{aligned}
         \end{equation}
     where the extension operator \(P_i: \Lambda \rightarrow V_i\) is continuous for \(i=1, 2\).
-\end{proposition}
+\end{definition}
 
 Then, we prove the equivalence between problems \eqref{weak_poisson} and \eqref{weak_decomp}. This equivalence is important since it allows us to justify the use of the MFS and its convergence for a domain decomposition problem.
 
 \section{The Method of Fundamental Solutions}
 
-Let $p(x)$ be a polynomial in $x=(x_1,\dots,x_d)$ with constant coefficients, and $p(\partial)$ be the operator obtained by substituting $x_i$ $\frac{\partial}{\partial x_i}$ for in $p(x)$. A distribution $\Phi$ in $\mathcal{D}^\star(\mathbb{R}^n)$ is considered a fundamental solution of $p(\partial)$ if $p(\partial) \Phi = \delta$, where $\delta$ is the Dirac Delta distribution.
+Let $p(x)$ be a polynomial in $x=(x_1,\dots,x_d)$ with constant coefficients, and $p(\partial)$ be the operator obtained by substituting $x_i$ for $\frac{\partial}{\partial x_i}$ in $p(x)$. A distribution $\Phi$ in $\mathcal{D}^\star(\mathbb{R}^n)$ is considered a fundamental solution of $p(\partial)$ if $p(\partial) \Phi = \delta$, where $\delta$ is the Dirac Delta distribution.
 
 We observe that fundamental solutions are not unique, as adding any $v$ such that $p(\partial) v(x) = 0$ for $x \in \mathbb{R}^d$ results in $p(\partial) (\Phi + v) = \delta$. However, certain fundamental solutions are chosen for their asymptotic behavior, a requirement for the MFS.
 
@@ -554,7 +548,7 @@ In practice, one obtains a system of equations analogous to the system \eqref{MF
 In this section, we briefly summarize our findings for the Dirac operator with infinite mass boundary conditions. The Helmholtz equation with Cauchy-Riemman oblique boundary conditions \eqref{helm_system} was used for the Dirac operator. First, we address Conjecture \ref{david_conjectures}, which is corroborated by Figures \ref{eigenvalues_rectangle_width_m_1} and \ref{eigenvalues_rectangle_width_m_5}. Several
 interesting observations can be made:
 \begin{enumerate}
-    \item \label{dirac_sim_quad_point_1} the eigenvalues for varying \(m\) approach \(m\) with a diminishing gap, remaining above \(m\). It is possible to see that the global minimizer of the third eigenvalue is not a square for \(m=1\), but for a certain rectangle with width \(a \approx 2.2\). We point out that the square is indeed the minimizer of the third eigenvalue for any mass \(m\) above some critical mass \(1 \leq m_{\text{crit}} \leq 5\);
+    \item \label{dirac_sim_quad_point_1} the eigenvalues for varying \(m\) approach \(m\) with a diminishing gap, remaining above \(m\). From Figure \ref{eigenvalues_rectangle_width_m_1} it is possible to see that the global minimizer of the third eigenvalue is not a square for \(m=1\), but for a certain rectangle with width \(a \approx 2.2\). We point out that the square is indeed the minimizer of the third eigenvalue for any mass \(m\) above some critical mass \(1 \leq m_{\text{crit}} \leq 5\);
 
     \item \label{dirac_sim_quad_point_2} starting from the third eigenvalue, spikes appear, indicating eigenvalues with multiplicity 2, such as the third and fourth eigenvalues coinciding between 1 and 1.5. This multiplicity pattern becomes more frequent as the order of the eigenvalues increases;
 
@@ -629,7 +623,7 @@ A triangle \(T\) is subequilateral if its basis vertices are \((0, 0)\) and \((1
       \centering
       \includegraphics[width=\textwidth]{/home/francisco/Universidade/Tese/Report/Report/Images/Dirac/triangles/triangle_first_eigenvalue.png}
       \captionsetup{width=0.9\linewidth} % Adjust the width of the caption
-      \captionof{figure}{Plot of the first three eigenvalues against the perimeter for triangular domains.}
+      \captionof{figure}{Plot of the first eigenvalue against the perimeter for triangular domains.}
     \label{dirac_smooth_first_eigenvalue}
 \end{minipage}%
     %\hspace{0.5cm} % Add some horizontal space between the figures
